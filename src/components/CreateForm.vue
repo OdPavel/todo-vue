@@ -1,20 +1,23 @@
 <script setup>
+const FORM_DEFAULT_VALUE = {
+  inputContent: '',
+  inputCategory: null,
+};
 import { computed, ref } from 'vue';
+import { useTodoStore } from '../store';
 
-const emit = defineEmits(['addTodo']);
+const todosStore = useTodoStore();
 
-const inputContent = ref('');
-const inputCategory = ref(null);
+const inputContent = ref(FORM_DEFAULT_VALUE.inputContent);
+const inputCategory = ref(FORM_DEFAULT_VALUE.inputCategory);
 
 const disabledButon = computed(() => {
-  let done = false;
-  done = inputContent && inputCategory;
-  return done;
+  return !!inputContent.value && !!inputCategory.value;
 });
 
 const resetForm = () => {
-  inputContent.value = '';
-  inputCategory.value = null;
+  inputContent.value = FORM_DEFAULT_VALUE.inputContent;
+  inputCategory.value = FORM_DEFAULT_VALUE.inputCategory;
 };
 
 const addTodo = () => {
@@ -29,16 +32,13 @@ const addTodo = () => {
     disabled: true,
     id: new Date().getTime(),
   };
-
-  emit('addTodo', todo);
-
+  todosStore.ADD_TODO(todo);
   resetForm();
 };
 </script>
 
 <template>
   <form @submit.prevent="addTodo">
-    <h4></h4>
     <input type="text" placeholder="Введите вашу задачу" v-model="inputContent" />
     <h4>Выберите категорию</h4>
     <div class="options">

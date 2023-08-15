@@ -1,36 +1,21 @@
 <script setup>
-const emit = defineEmits(['removeTask', 'editTask']);
+import { storeToRefs } from 'pinia';
+import { useTodoStore } from '../store';
+import TodoItem from './Todoitem.vue';
 
-const props = defineProps({
-  todosASC: {
-    type: Array,
-    required: true,
-  },
-});
+const store = useTodoStore();
+const { todos } = storeToRefs(store);
 
-const removeTask = (todo) => {
-  emit('removeTask', todo);
+const editTodo = (todo) => {
+  store.EDIT_TODO(todo);
 };
-
-const editTask = (todo) => {
-  emit('editTask', todo);
+const removeTodo = (todo) => {
+  store.REMOVE_TODO(todo);
 };
 </script>
 
 <template>
-  <div v-for="todo in todosASC" :key="todo.id" :class="`todo-item ${todo.done && 'done'}`">
-    <label>
-      <input type="checkbox" v-model="todo.done" />
-      <span :class="`bubble ${todo.category}`"></span>
-    </label>
-    <div class="todo-content">
-      <input type="text" v-model="todo.content" :disabled="todo.disabled" />
-    </div>
-    <div class="actions">
-      <button class="correct" @click="editTask(todo)">
-        {{ todo.disabled ? 'Корректировать' : 'Сохранить' }}
-      </button>
-      <button class="delete" @click="removeTask(todo)">Удалить</button>
-    </div>
+  <div v-for="todo in todos" :key="todo.id" :class="`todo-item ${todo.done && 'done'}`">
+    <TodoItem :todo="todo" @editTodo="editTodo(todo)" @removeTodo="removeTodo(todo)" />
   </div>
 </template>

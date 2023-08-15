@@ -172,6 +172,12 @@ input:checked ~ .bubble::after {
   opacity: 0.75;
 }
 
+.create-todo input[type='submit']:disabled {
+  background: #6e6c6ccc;
+  box-shadow: var(--dark);
+  cursor: not-allowed;
+}
+
 .todo-list .list {
   margin: 1rem 0;
 }
@@ -231,6 +237,10 @@ input:checked ~ .bubble::after {
 .todo-item.done .todo-content input {
   text-decoration: line-through;
   color: var(--grey);
+}
+
+.todo-item.done .correct {
+  cursor: not-allowed;
 }
 
 .todo-item .actions .correct {
